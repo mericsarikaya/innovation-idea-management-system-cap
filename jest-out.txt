@@ -1,0 +1,358 @@
+  console.info
+    [cds] - loaded model from 4 file(s):
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+
+  console.log
+      srv\service.cds
+
+      at cds.<anonymous> (node_modules/@sap/cds/bin/serve.js:287:53)
+
+  console.log
+      app\fiori-service.cds
+
+      at cds.<anonymous> (node_modules/@sap/cds/bin/serve.js:287:53)
+
+  console.log
+      db\schema.cds
+
+      at cds.<anonymous> (node_modules/@sap/cds/bin/serve.js:287:53)
+
+  console.log
+      node_modules\@sap\cds\common.cds
+
+      at cds.<anonymous> (node_modules/@sap/cds/bin/serve.js:287:53)
+
+  console.log
+
+
+      at cds.<anonymous> (node_modules/@sap/cds/bin/serve.js:292:13)
+
+  console.info
+    [cds] - connect to db > sqlite { url: ':memory:' }
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+
+(node:27572) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+  console.log
+      > init from db\data\ideamanagement.db-Users.csv
+
+      at node_modules/@sap/cds/lib/dbs/cds-deploy.js:40:78
+
+  console.log
+      > init from db\data\ideamanagement-db-Segments.csv
+
+      at node_modules/@sap/cds/lib/dbs/cds-deploy.js:40:78
+
+  console.log
+      > init from db\data\ideamanagement-db-Criteria.csv
+
+      at node_modules/@sap/cds/lib/dbs/cds-deploy.js:40:78
+
+  console.log
+      > init from db\data\ideamanagement-db-Companies.csv
+
+      at node_modules/@sap/cds/lib/dbs/cds-deploy.js:40:78
+
+  console.log
+    /> successfully deployed to in-memory database.
+
+      at Object.to (node_modules/@sap/cds/lib/dbs/cds-deploy.js:42:12)
+
+  console.info
+    [cds] - using auth strategy { kind: 'custom', impl: 'srv\\auth\\db-auth.js' }
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+          at Array.map (<anonymous>)
+
+  console.info
+    [cds] - serving IdeaService {
+      at: [ '/odata/v4/idea' ],
+      decl: 'srv\\service.cds:3',
+      impl: 'srv\\idea-service.js'
+    }
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+
+  console.info
+    [cds] - server listening on { url: 'http://localhost:62941' }
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+
+  console.info
+    [cds] - server v10.0.5 launched in 1384 ms
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+
+  console.info
+    [odata] - POST /odata/v4/idea/Suggestions
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+
+  console.warn
+    [odata] - 400 - Error: Topic cannot be empty
+        at ApplicationService.error (C:\Users\meric\Desktop\kodlama\NTT Staj\innovation-idea-management-system-cap\srv\idea-service.js:18:18)
+        at C:\Users\meric\Desktop\kodlama\NTT Staj\innovation-idea-management-system-cap\node_modules\@sap\cds\lib\srv\srv-dispatch.js:48:80
+        at Array.map (<anonymous>)
+        at ApplicationService.handle (C:\Users\meric\Desktop\kodlama\NTT Staj\innovation-idea-management-system-cap\node_modules\@sap\cds\lib\srv\srv-dispatch.js:48:54)
+        at ApplicationService.handle (C:\Users\meric\Desktop\kodlama\NTT Staj\innovation-idea-management-system-cap\node_modules\@sap\cds\libx\_runtime\common\Service.js:84:18)
+        at processTicksAndRejections (node:internal/process/task_queues:103:5) {
+      code: '400',
+      status: 400
+    }
+
+      at logger.warn (node_modules/@sap/cds/lib/log/cds-log.js:101:59)
+      at ODataAdapter.http_error (node_modules/@sap/cds/lib/srv/middlewares/errors.js:29:3)
+      at Layer.handleError (node_modules/router/lib/layer.js:116:17)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at Immediate.next (node_modules/router/index.js:291:5)
+      at Immediate._onImmediate (node_modules/router/index.js:688:15)
+
+  console.info
+    [odata] - POST /odata/v4/idea/Suggestions
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+
+  console.warn
+    [odata] - 400 - Error: Company must be selected
+        at ApplicationService.error (C:\Users\meric\Desktop\kodlama\NTT Staj\innovation-idea-management-system-cap\srv\idea-service.js:22:18)
+        at C:\Users\meric\Desktop\kodlama\NTT Staj\innovation-idea-management-system-cap\node_modules\@sap\cds\lib\srv\srv-dispatch.js:48:80
+        at Array.map (<anonymous>)
+        at ApplicationService.handle (C:\Users\meric\Desktop\kodlama\NTT Staj\innovation-idea-management-system-cap\node_modules\@sap\cds\lib\srv\srv-dispatch.js:48:54)
+        at ApplicationService.handle (C:\Users\meric\Desktop\kodlama\NTT Staj\innovation-idea-management-system-cap\node_modules\@sap\cds\libx\_runtime\common\Service.js:84:18)
+        at processTicksAndRejections (node:internal/process/task_queues:103:5) {
+      code: '400',
+      status: 400
+    }
+
+      at logger.warn (node_modules/@sap/cds/lib/log/cds-log.js:101:59)
+      at ODataAdapter.http_error (node_modules/@sap/cds/lib/srv/middlewares/errors.js:29:3)
+      at Layer.handleError (node_modules/router/lib/layer.js:116:17)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at Immediate.next (node_modules/router/index.js:291:5)
+      at Immediate._onImmediate (node_modules/router/index.js:688:15)
+
+  console.info
+    [odata] - POST /odata/v4/idea/Suggestions
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+
+  console.log
+    ✓ Suggestion created: undefined by user undefined
+
+      at ApplicationService.log (srv/idea-service.js:40:13)
+          at Array.map (<anonymous>)
+
+  console.info
+    [odata] - POST /odata/v4/idea/Suggestions
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+
+  console.log
+    ✓ Suggestion created: undefined by user undefined
+
+      at ApplicationService.log (srv/idea-service.js:40:13)
+          at Array.map (<anonymous>)
+
+  console.info
+    [odata] - POST /odata/v4/idea/Scorings
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+
+  console.warn
+    [odata] - 400 - Error: companyRnD must be a number between 0 and 10
+        at ApplicationService.error (C:\Users\meric\Desktop\kodlama\NTT Staj\innovation-idea-management-system-cap\srv\idea-service.js:82:18)
+        at C:\Users\meric\Desktop\kodlama\NTT Staj\innovation-idea-management-system-cap\node_modules\@sap\cds\lib\srv\srv-dispatch.js:48:80
+        at Array.map (<anonymous>)
+        at ApplicationService.handle (C:\Users\meric\Desktop\kodlama\NTT Staj\innovation-idea-management-system-cap\node_modules\@sap\cds\lib\srv\srv-dispatch.js:48:54)
+        at ApplicationService.handle (C:\Users\meric\Desktop\kodlama\NTT Staj\innovation-idea-management-system-cap\node_modules\@sap\cds\libx\_runtime\common\Service.js:84:18)
+        at processTicksAndRejections (node:internal/process/task_queues:103:5) {
+      code: '400',
+      status: 400
+    }
+
+      at logger.warn (node_modules/@sap/cds/lib/log/cds-log.js:101:59)
+      at ODataAdapter.http_error (node_modules/@sap/cds/lib/srv/middlewares/errors.js:29:3)
+      at Layer.handleError (node_modules/router/lib/layer.js:116:17)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at Immediate.next (node_modules/router/index.js:291:5)
+      at Immediate._onImmediate (node_modules/router/index.js:688:15)
+
+  console.info
+    [odata] - POST /odata/v4/idea/Scorings
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+
+  console.info
+    [odata] - POST /odata/v4/idea/Suggestions
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+
+  console.log
+    ✓ Suggestion created: undefined by user undefined
+
+      at ApplicationService.log (srv/idea-service.js:40:13)
+          at Array.map (<anonymous>)
+
+  console.info
+    [odata] - POST /odata/v4/idea/Decisions
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+
+  console.warn
+    [odata] - 400 - Error: Project class, project type and project year are required when the decision is accepted
+        at ApplicationService.error (C:\Users\meric\Desktop\kodlama\NTT Staj\innovation-idea-management-system-cap\srv\idea-service.js:119:20)
+        at C:\Users\meric\Desktop\kodlama\NTT Staj\innovation-idea-management-system-cap\node_modules\@sap\cds\lib\srv\srv-dispatch.js:48:80
+        at Array.map (<anonymous>)
+        at ApplicationService.handle (C:\Users\meric\Desktop\kodlama\NTT Staj\innovation-idea-management-system-cap\node_modules\@sap\cds\lib\srv\srv-dispatch.js:48:54)
+        at ApplicationService.handle (C:\Users\meric\Desktop\kodlama\NTT Staj\innovation-idea-management-system-cap\node_modules\@sap\cds\libx\_runtime\common\Service.js:84:18)
+        at processTicksAndRejections (node:internal/process/task_queues:103:5) {
+      code: '400',
+      status: 400
+    }
+
+      at logger.warn (node_modules/@sap/cds/lib/log/cds-log.js:101:59)
+      at ODataAdapter.http_error (node_modules/@sap/cds/lib/srv/middlewares/errors.js:29:3)
+      at Layer.handleError (node_modules/router/lib/layer.js:116:17)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at Immediate.next (node_modules/router/index.js:291:5)
+      at Immediate._onImmediate (node_modules/router/index.js:688:15)
+
+  console.info
+    [odata] - POST /odata/v4/idea/Decisions
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+
+  console.info
+    [odata] - GET /odata/v4/idea/IdeaNumbers {
+      '$filter': "suggestion_ID eq '134c2cc8-7b26-4ebd-a8a6-7dd4126d771e'"
+    }
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+
+  console.info
+    [odata] - POST /odata/v4/idea/Suggestions
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+
+  console.log
+    ✓ Suggestion created: undefined by user undefined
+
+      at ApplicationService.log (srv/idea-service.js:40:13)
+          at Array.map (<anonymous>)
+
+  console.info
+    [odata] - POST /odata/v4/idea/Decisions
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+
+  console.info
+    [odata] - GET /odata/v4/idea/IdeaNumbers {
+      '$filter': "suggestion_ID eq '0ef359ce-d815-40d9-adfa-8bf681d98e15'"
+    }
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+
+  console.info
+    [odata] - POST /odata/v4/idea/Suggestions
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+
+  console.log
+    ✓ Suggestion created: undefined by user undefined
+
+      at ApplicationService.log (srv/idea-service.js:40:13)
+          at Array.map (<anonymous>)
+
+  console.info
+    [odata] - POST /odata/v4/idea/FileUploads
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+
+  console.warn
+    [odata] - 400 - Error: Only .pdf, .xlsx, and .docx files are allowed
+        at ApplicationService.error (C:\Users\meric\Desktop\kodlama\NTT Staj\innovation-idea-management-system-cap\srv\idea-service.js:180:18)
+        at C:\Users\meric\Desktop\kodlama\NTT Staj\innovation-idea-management-system-cap\node_modules\@sap\cds\lib\srv\srv-dispatch.js:48:80
+        at Array.map (<anonymous>)
+        at ApplicationService.handle (C:\Users\meric\Desktop\kodlama\NTT Staj\innovation-idea-management-system-cap\node_modules\@sap\cds\lib\srv\srv-dispatch.js:48:54)
+        at ApplicationService.handle (C:\Users\meric\Desktop\kodlama\NTT Staj\innovation-idea-management-system-cap\node_modules\@sap\cds\libx\_runtime\common\Service.js:84:18)
+        at processTicksAndRejections (node:internal/process/task_queues:103:5) {
+      code: '400',
+      status: 400
+    }
+
+      at logger.warn (node_modules/@sap/cds/lib/log/cds-log.js:101:59)
+      at ODataAdapter.http_error (node_modules/@sap/cds/lib/srv/middlewares/errors.js:29:3)
+      at Layer.handleError (node_modules/router/lib/layer.js:116:17)
+      at trimPrefix (node_modules/router/index.js:340:13)
+      at node_modules/router/index.js:297:9
+      at processParams (node_modules/router/index.js:582:12)
+      at Immediate.next (node_modules/router/index.js:291:5)
+      at Immediate._onImmediate (node_modules/router/index.js:688:15)
+
+  console.info
+    [odata] - POST /odata/v4/idea/FileUploads
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+
+  console.log
+    ✓ File uploaded: undefined for suggestion undefined
+
+      at ApplicationService.log (srv/idea-service.js:211:13)
+          at Array.map (<anonymous>)
+
+  console.info
+    [odata] - GET /odata/v4/idea/Criteria
+
+      at Function.logger.info (node_modules/@sap/cds/lib/log/cds-log.js:100:59)
+
+FAIL test/idea-service.test.js
+  IdeaService
+    Suggestions
+      √ rejects a suggestion without topic (144 ms)
+      √ rejects a suggestion without company (66 ms)
+      √ creates a suggestion and sets submittedBy from the logged-in user (75 ms)
+    Scorings
+      √ rejects an out-of-range score (82 ms)
+      √ computes the weighted total score like the original ABAP formula (78 ms)
+    Decisions
+      √ rejects an accepted decision without project class/type/year (75 ms)
+      × generates an IdeaNumber in the ABAP format when accepted (165 ms)
+      √ does not generate an IdeaNumber when rejected (209 ms)
+    FileUploads
+      √ rejects disallowed file types (74 ms)
+      √ accepts an allowed file type and derives the mimeType (85 ms)
+    Criteria
+      √ is seeded with reference scoring criteria (78 ms)
+
+  ● IdeaService › Decisions › generates an IdeaNumber in the ABAP format when accepted
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 1
+    Received: 0
+
+    [0m [90m 123 |[39m       )
+     [90m 124 |[39m
+    [31m[1m>[22m[39m[90m 125 |[39m       expect(data[33m.[39mvalue[33m.[39mlength)[33m.[39mtoBe([35m1[39m)
+     [90m     |[39m                                 [31m[1m^[22m[39m
+     [90m 126 |[39m       expect(data[33m.[39mvalue[[35m0[39m][33m.[39mideaNumber)[33m.[39mtoMatch([35m/^2025-1-AD-\d{4}$/[39m)
+     [90m 127 |[39m     })
+     [90m 128 |[39m[0m
+
+      at Object.toBe (test/idea-service.test.js:125:33)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 10 passed, 11 total
+Snapshots:   0 total
+Time:        2.341 s, estimated 3 s
+Ran all test suites.

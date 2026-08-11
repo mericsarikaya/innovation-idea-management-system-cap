@@ -1,0 +1,12 @@
+ID,successFactor,score1to3,score4to6,score7to9,score10
+cr111111-1111-1111-1111-111111111111,Company R&D Fit,No alignment with existing R&D capabilities,Some alignment; minor R&D investment needed,Strong alignment; leverages current R&D,Perfect fit; directly extends core R&D
+cr222222-2222-2222-2222-222222222222,Company Market Fit,Outside current market focus,Adjacent to current markets,Well aligned with target markets,Core to company's strategic markets
+cr333333-3333-3333-3333-333333333333,Project Size,Very small scope/impact,Limited scope/impact,Significant scope/impact,Major transformative scope
+cr444444-4444-4444-4444-444444444444,ROI,Negative or unclear return,Low but positive return,Good return within 2-3 years,Excellent return within 1 year
+cr555555-5555-5555-5555-555555555555,Profit Margin,Reduces margin,Neutral impact on margin,Improves margin moderately,Significantly improves margin
+cr666666-6666-6666-6666-666666666666,Competition,No competitive advantage,Minor competitive advantage,Clear competitive advantage,Decisive competitive advantage
+cr777777-7777-7777-7777-777777777777,Success Probability,Very low probability of success,Moderate probability of success,High probability of success,Near-certain probability of success
+cr888888-8888-8888-8888-888888888888,Strategy Alignment,Not aligned with company strategy,Loosely aligned with company strategy,Well aligned with company strategy,Fully aligned with company strategy
+cr999999-9999-9999-9999-999999999999,Differentiation,No differentiation from existing offerings,Minor differentiation,Clear differentiation,Unique in the market
+craaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa,Human & Environment Impact,Negative human/environmental impact,Neutral human/environmental impact,Positive human/environmental impact,Highly positive human/environmental impact
+crbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb,Ownership / IP,No IP or ownership advantage,Limited IP or ownership advantage,Clear IP or ownership advantage,Exclusive IP or ownership advantage
