@@ -1,0 +1,65 @@
+### Variables
+@baseUrl = http://localhost:4004
+@username = mericsarikaya
+@password = test123
+@suggestionId = 
+
+### 1. Create Suggestion
+POST {{baseUrl}}/odata/v4/idea/Suggestions
+Authorization: Basic {{username}} {{password}}
+Content-Type: application/json
+
+{
+  "topic": "AI-powered customer support system",
+  "productFeatures": "Chatbot integration",
+  "innovations": "Machine learning model",
+  "feasibility": "High",
+  "additionalInvestment": "50000",
+  "company_ID": "c1111111-1111-1111-1111-111111111111",
+  "segment_ID": "s1111111-1111-1111-1111-111111111111"
+}
+
+### 2. Get all Suggestions
+GET {{baseUrl}}/odata/v4/idea/Suggestions
+Authorization: Basic {{username}} {{password}}
+
+### 3. Create Scoring (replace SUGGESTION_ID with actual ID from step 1)
+POST {{baseUrl}}/odata/v4/idea/Scorings
+Authorization: Basic {{username}} {{password}}
+Content-Type: application/json
+
+{
+  "suggestion_ID": "962dc964-ba8f-4efd-be7e-566d73b9a588",
+  "companyRnD": 8,
+  "companyMarket": 7,
+  "projectSize": 6,
+  "roi": 9,
+  "profitMargin": 7,
+  "competition": 5,
+  "success": 8,
+  "strategy": 9,
+  "differentiation": 8,
+  "humanEnvironment": 6,
+  "ownership": 7
+}
+
+### 4. Create Decision (replace SUGGESTION_ID with actual ID from step 1)
+POST {{baseUrl}}/odata/v4/idea/Decisions
+Authorization: Basic {{username}} {{password}}
+Content-Type: application/json
+
+{
+  "suggestion_ID": "962dc964-ba8f-4efd-be7e-566d73b9a588",
+  "decision": "K",
+  "projectClass": "V",
+  "projectType": "YI",
+  "projectYear": "2025"
+}
+
+### 5. Get IdeaNumbers (to verify auto-generation)
+GET {{baseUrl}}/odata/v4/idea/IdeaNumbers
+Authorization: Basic {{username}} {{password}}
+
+### 6. Get IdeaOverview
+GET {{baseUrl}}/odata/v4/idea/IdeaOverview
+Authorization: Basic {{username}} {{password}}
