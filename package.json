@@ -1,23 +1,27 @@
 {
   "name": "innovation-idea-management-system-cap",
   "version": "1.0.0",
-  "description": "Welcome to your new CAP project.",
+  "description": "Innovation & Idea Management System - SAP CAP Project",
   "main": "index.js",
   "scripts": {
     "start": "cds-serve",
     "watch": "cds watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@sap/cds": "^10.0.5",
-    "bcryptjs": "^3.0.3"
+    "bcryptjs": "^3.0.3",
+    "express": "^4"
   },
   "devDependencies": {
+    "@cap-js/cds-test": "^1",
     "@cap-js/sqlite": "^3.0.2",
-    "@sap/cds-dk": "^10.0.7"
+    "@sap/cds-dk": "^10.0.7",
+    "@sap/ux-specification": "*",
+    "jest": "^30.4.2"
   },
   "cds": {
     "requires": {
@@ -31,7 +35,47 @@
         "kind": "basic",
         "impl": "./srv/auth/db-auth.js"
       }
+    },
+    "[development]": {
+      "requires": {
+        "auth": {
+          "kind": "mocked",
+          "users": {
+            "mericsarikaya": {
+              "password": "test123",
+              "roles": ["Submitter", "authenticated-user"]
+            },
+            "argemuduru": {
+              "password": "test123",
+              "roles": ["Manager", "authenticated-user"]
+            },
+            "ayseyilmaz": {
+              "password": "test123",
+              "roles": ["Submitter", "authenticated-user"]
+            }
+          }
+        }
+      }
+    },
+    "[test]": {
+      "requires": {
+        "db": {
+          "kind": "sqlite",
+          "credentials": {
+            "url": ":memory:"
+          }
+        }
+      }
+    },
+    "i18n": {
+      "default_language": "en",
+      "fallback_bundle": "en"
     }
   },
-  "sapux": []
+  "sapux": ["app/ideas"],
+  "jest": {
+    "modulePathIgnorePatterns": [
+      "<rootDir>/gen/"
+    ]
+  }
 }

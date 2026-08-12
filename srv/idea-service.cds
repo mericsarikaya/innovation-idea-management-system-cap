@@ -1,6 +1,6 @@
 using { ideamanagement.db as db } from '../db/schema';
 
-service IdeaService @(path: '/odata/v4/idea') {
+service IdeaService @(path: 'idea') {
 
   @readonly
   entity Companies as projection on db.Companies;
@@ -11,12 +11,17 @@ service IdeaService @(path: '/odata/v4/idea') {
   @readonly
   entity Criteria as projection on db.Criteria;
 
-  @(restrict: [
-    { grant: ['READ'],                     to: 'Submitter' },
-    { grant: ['READ'],                     to: 'Manager' },
-    { grant: ['CREATE', 'UPDATE'],         to: 'Submitter' }
-  ])
+  @readonly
+  entity Users as projection on db.Users;
+
   @odata.draft.enabled
+  @cds.redirection.target
+  @(restrict: [
+    { grant: ['READ'],   to: 'Submitter' },
+    { grant: ['READ'],   to: 'Manager' },
+    { grant: ['CREATE'], to: 'Submitter' },
+    { grant: ['UPDATE'], to: 'Submitter', where: (submittedBy.username = $user) }
+  ])
   entity Suggestions as projection on db.Suggestions;
 
   @(restrict: [

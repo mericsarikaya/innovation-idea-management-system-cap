@@ -30,9 +30,9 @@ entity Users : cuid {
 
 entity Suggestions : cuid, managed {
   submittedBy          : Association to Users;
-  company              : Association to Companies;
-  segment              : Association to Segments;
-  topic                : LargeString;
+  company              : Association to Companies @mandatory;
+  ideaSegment          : Association to Segments  @mandatory;
+  topic                : LargeString @mandatory;
   productFeatures      : LargeString;
   innovations          : LargeString;
   feasibility          : LargeString;
@@ -45,17 +45,17 @@ entity Suggestions : cuid, managed {
 
 entity Scorings : cuid {
   suggestion       : Association to Suggestions;
-  companyRnD       : Integer;
-  companyMarket    : Integer;
-  projectSize      : Integer;
-  roi              : Integer;
-  profitMargin     : Integer;
-  competition      : Integer;
-  success          : Integer;
-  strategy         : Integer;
-  differentiation  : Integer;
-  humanEnvironment : Integer;
-  ownership        : Integer;
+  companyRnD       : Integer @assert.range: [0, 10];
+  companyMarket    : Integer @assert.range: [0, 10];
+  projectSize      : Integer @assert.range: [0, 10];
+  roi              : Integer @assert.range: [0, 10];
+  profitMargin     : Integer @assert.range: [0, 10];
+  competition      : Integer @assert.range: [0, 10];
+  success          : Integer @assert.range: [0, 10];
+  strategy         : Integer @assert.range: [0, 10];
+  differentiation  : Integer @assert.range: [0, 10];
+  humanEnvironment : Integer @assert.range: [0, 10];
+  ownership        : Integer @assert.range: [0, 10];
   totalScore       : Integer;
 }
 
@@ -76,21 +76,18 @@ entity IdeaNumbers : cuid {
 entity FileUploads : cuid, managed {
   suggestion : Association to Suggestions;
   fileName   : String(255);
+  mimeType   : String(100);
   content    : LargeString;
 }
 
-view IdeaOverview as select from Suggestions as s
-  left join Decisions   as d  on d.suggestion.ID  = s.ID
-  left join IdeaNumbers as n  on n.suggestion.ID  = s.ID
-  left join Scorings    as sc on sc.suggestion.ID = s.ID
-{
-  key s.ID          as suggestionID,
-      s.createdBy,
-      s.createdAt,
-      s.topic,
-      s.company.name as companyName,
-      s.segment.name as segmentName,
-      d.decision,
-      sc.totalScore,
-      n.ideaNumber
+view IdeaOverview as select from Suggestions {
+  key ID as suggestionID,
+  createdBy,
+  createdAt,
+  topic,
+  company.name     as companyName,
+  ideaSegment.name as segmentName,
+  scoring.totalScore,
+  decision.decision,
+  ideaNumber.ideaNumber
 }

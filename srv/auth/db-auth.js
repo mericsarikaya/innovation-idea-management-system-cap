@@ -14,7 +14,7 @@ module.exports = function db_basic_auth(options) {
   const DEBUG = cds.debug('basic|auth')
   const login_required = options.login_required || process.env.NODE_ENV === 'production'
 
-  return async function db_basic_auth(req, res, next) {
+  return async function auth_middleware(req, res, next) {
     req._login = login
     const auth = req.headers.authorization
     if (!auth?.match(/^basic/i)) return login_required ? req._login() : next()
@@ -23,8 +23,9 @@ module.exports = function db_basic_auth(options) {
 
     try {
       const db = await cds.connect.to('db')
+      const { Users } = cds.entities('ideamanagement.db')
       const record = await db.run(
-        SELECT.one.from('ideamanagement.db.Users').where({ username: id })
+        SELECT.one.from(Users).where({ username: id })
       )
 
       if (!record || !bcrypt.compareSync(pwd || '', record.password)) {
@@ -37,8 +38,7 @@ module.exports = function db_basic_auth(options) {
         : ['Submitter', 'authenticated-user']
 
       const u = new cds.User({ id: record.username, roles, attr: { title: record.title } })
-      let ctx = cds.context
-      ctx.user = req.user = u
+      req.user = u
       DEBUG?.('authenticated:', { user: u.id, roles })
       next()
     } catch (e) {

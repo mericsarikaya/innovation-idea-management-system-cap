@@ -1,7 +1,8 @@
 const cds = require('@sap/cds')
-const { GET, POST } = cds.test(__dirname + '/..')
+const { GET, POST, PATCH } = cds.test(__dirname + '/..')
 
 const submitter = { username: 'mericsarikaya', password: 'test123' }
+const otherSubmitter = { username: 'ayseyilmaz', password: 'test123' }
 const manager = { username: 'argemuduru', password: 'test123' }
 
 const companyID = 'c1111111-1111-1111-1111-111111111111'
@@ -40,7 +41,35 @@ describe('IdeaService', () => {
       }, { auth: submitter })
 
       expect(status).toBe(201)
-      expect(data.submittedBy_ID).toBeDefined()
+      expect(data.submittedBy_ID).toMatch(/^[0-9a-f-]{36}$/)
+    })
+
+    it('allows the owner to update their own suggestion', async () => {
+      const { data: created } = await POST('/odata/v4/idea/Suggestions', {
+        topic: 'Owner-editable idea',
+        company_ID: companyID,
+        ideaSegment_ID: segmentID
+      }, { auth: submitter })
+
+      const { status } = await PATCH(`/odata/v4/idea/Suggestions/${created.ID}`, {
+        topic: 'Owner-editable idea (updated)'
+      }, { auth: submitter })
+
+      expect(status).toBe(200)
+    })
+
+    it('rejects updates to a suggestion by a different submitter', async () => {
+      const { data: created } = await POST('/odata/v4/idea/Suggestions', {
+        topic: 'Someone else\'s idea',
+        company_ID: companyID,
+        ideaSegment_ID: segmentID
+      }, { auth: submitter })
+
+      await expect(
+        PATCH(`/odata/v4/idea/Suggestions/${created.ID}`, {
+          topic: 'Hijacked idea'
+        }, { auth: otherSubmitter })
+      ).rejects.toMatchObject({ response: { status: 403 } })
     })
   })
 

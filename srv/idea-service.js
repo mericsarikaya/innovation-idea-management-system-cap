@@ -1,8 +1,9 @@
 const cds = require('@sap/cds');
-const { v4: uuid } = require('uuid');
+const { randomUUID: uuid } = require('crypto');
 
 module.exports = cds.service.impl(async (srv) => {
   const db = await cds.connect.to('db');
+  const { Users, Suggestions, IdeaNumbers } = cds.entities('ideamanagement.db');
 
   // ============= SUGGESTIONS HANDLERS =============
 
@@ -21,48 +22,56 @@ module.exports = cds.service.impl(async (srv) => {
       return req.error(400, 'Company must be selected');
     }
 
-    if (!data.segment_ID) {
+    if (!data.ideaSegment_ID) {
       return req.error(400, 'Segment must be selected');
     }
 
-    // submittedBy'i current user'dan set et
+    // submittedBy'i current user'dan set et (Users.ID, username değil)
     if (req.user && req.user.id) {
-      data.submittedBy_ID = req.user.id;
+      const user = await db.run(
+        SELECT.one.from(Users).columns('ID').where({ username: req.user.id })
+      );
+      if (user) {
+        data.submittedBy_ID = user.ID;
+      }
     }
   });
 
   /**
    * After CREATE: Suggestion başarıyla oluşturulduktan sonra log
    */
-  srv.after('CREATE', 'Suggestions', async (data, req) => {
-    console.log(`✓ Suggestion created: ${data.ID} by user ${data.submittedBy_ID}`);
+  srv.after('CREATE', 'Suggestions', async (_, req) => {
+    console.log(`✓ Suggestion created: ${req.data.ID} by user ${req.data.submittedBy_ID}`);
   });
 
   // ============= SCORINGS HANDLERS =============
 
   /**
-   * Before CREATE/UPDATE Scorings: Validate scores ve totalScore hesapla
+   * Before CREATE/UPDATE Scorings: Validate scores ve ağırlıklı totalScore hesapla
+   * (orijinal ABAP puan_hesaplama metodundaki ağırlıklarla aynı)
    */
   srv.before(['CREATE', 'UPDATE'], 'Scorings', async (req) => {
     const data = req.data;
 
     // Validate all score fields (0-10 range)
-    const scoreFields = [
-      'companyRnD',
-      'companyMarket',
-      'projectSize',
-      'roi',
-      'profitMargin',
-      'competition',
-      'success',
-      'strategy',
-      'differentiation',
-      'humanEnvironment',
-      'ownership'
-    ];
+    const scoreWeights = {
+      companyRnD: 3,
+      companyMarket: 3,
+      projectSize: 5,
+      roi: 5,
+      profitMargin: 5,
+      competition: 4,
+      success: 5,
+      strategy: 5,
+      differentiation: 5,
+      humanEnvironment: 2,
+      ownership: 2
+    };
+    const scoreFields = Object.keys(scoreWeights);
 
     const errors = [];
-    const scores = [];
+    let hasScore = false;
+    let totalScore = 0;
 
     for (const field of scoreFields) {
       const value = data[field];
@@ -71,7 +80,8 @@ module.exports = cds.service.impl(async (srv) => {
         if (typeof value !== 'number' || value < 0 || value > 10) {
           errors.push(`${field} must be a number between 0 and 10`);
         } else {
-          scores.push(value);
+          hasScore = true;
+          totalScore += value * scoreWeights[field];
         }
       }
     }
@@ -80,9 +90,9 @@ module.exports = cds.service.impl(async (srv) => {
       return req.error(400, errors.join('; '));
     }
 
-    // Calculate totalScore as average
-    if (scores.length > 0) {
-      data.totalScore = Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 100) / 100;
+    // Calculate weighted totalScore, like the original ABAP formula
+    if (hasScore) {
+      data.totalScore = totalScore;
     }
   });
 
@@ -108,30 +118,42 @@ module.exports = cds.service.impl(async (srv) => {
     if (data.projectType && !validTypes.includes(data.projectType)) {
       return req.error(400, `Project type must be one of: ${validTypes.join(', ')}`);
     }
+
+    if (data.decision === 'K' && (!data.projectClass || !data.projectType || !data.projectYear)) {
+      return req.error(400, 'Project class, project type and project year are required when the decision is accepted');
+    }
   });
 
   /**
    * After CREATE Decision: Eğer accepted ise IdeaNumber generate et
    */
-  srv.after('CREATE', 'Decisions', async (data, req) => {
+  srv.after('CREATE', 'Decisions', async (_, req) => {
+    const data = req.data;
     if (data.decision === 'K') {
       // Suggestion bilgisini al
       const suggestion = await db.run(
-        SELECT.one.from('Suggestions').where({ ID: data.suggestion_ID }).columns(
-          (s) => {
+        SELECT.one.from(Suggestions).where({ ID: data.suggestion_ID }).columns(
+          s => {
             s('*');
-            s.company((c) => c('code'));
-            s.segment((sg) => sg('code'));
+            s.company(c => c('code'));
+            s.ideaSegment(sg => sg('code'));
           }
         )
       );
 
-      if (suggestion && suggestion.company && suggestion.segment) {
-        const ideaNumber = generateIdeaNumber(suggestion.company.code, suggestion.segment.code);
+      if (suggestion && suggestion.company && suggestion.ideaSegment) {
+        const { cnt } = await db.run(SELECT.one`count(*) as cnt`.from(IdeaNumbers));
+        const ideaNumber = generateIdeaNumber({
+          projectYear: data.projectYear,
+          segmentCode: suggestion.ideaSegment.code,
+          companyCode: suggestion.company.code,
+          governmentSupport: data.governmentSupport,
+          sequence: (cnt || 0) + 1
+        });
 
         // IdeaNumber create et
         await db.run(
-          INSERT.into('IdeaNumbers').entries({
+          INSERT.into(IdeaNumbers).entries({
             ID: uuid(),
             suggestion_ID: data.suggestion_ID,
             ideaNumber: ideaNumber
@@ -156,12 +178,14 @@ module.exports = cds.service.impl(async (srv) => {
     }
 
     // Check file extension
-    if (!isAllowedFileType(data.fileName)) {
+    const mimeType = getMimeType(data.fileName);
+    if (!mimeType) {
       return req.error(
         400,
         'Only .pdf, .xlsx, and .docx files are allowed'
       );
     }
+    data.mimeType = mimeType;
 
     // Check file size (content field)
     if (data.content) {
@@ -175,8 +199,8 @@ module.exports = cds.service.impl(async (srv) => {
   /**
    * After CREATE FileUploads: Log successful upload
    */
-  srv.after('CREATE', 'FileUploads', async (data, req) => {
-    console.log(`✓ File uploaded: ${data.fileName} for suggestion ${data.suggestion_ID}`);
+  srv.after('CREATE', 'FileUploads', async (_, req) => {
+    console.log(`✓ File uploaded: ${req.data.fileName} for suggestion ${req.data.suggestion_ID}`);
   });
 
   // ============= HELPER FUNCTIONS =============
@@ -211,32 +235,30 @@ module.exports = cds.service.impl(async (srv) => {
   }
 
   /**
-   * Generate IdeaNumber: companyCode + segmentCode + YYYYMMDD + 4-digit-hex
-   * Example: "1A20250811A1F2"
+   * Generate IdeaNumber like the original ABAP formula:
+   * <projectYear>-<segmentCode>-<companyCode><supportLetter>-<sequence>
+   * supportLetter: 'D' (Devlet Destekli) if governmentSupport, otherwise 'A' (Adi)
+   * Example: "2025-1-AD-0001"
    */
-  function generateIdeaNumber(companyCode, segmentCode) {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    const dateStr = `${year}${month}${day}`;
-
-    // Generate 4-digit hex (0000-FFFF)
-    const randomHex = Math.floor(Math.random() * 65536)
-      .toString(16)
-      .toUpperCase()
-      .padStart(4, '0');
-
-    return `${companyCode}${segmentCode}${dateStr}${randomHex}`;
+  function generateIdeaNumber({ projectYear, segmentCode, companyCode, governmentSupport, sequence }) {
+    const supportLetter = governmentSupport ? 'D' : 'A';
+    const seqStr = String(sequence).padStart(4, '0');
+    return `${projectYear}-${segmentCode}-${companyCode}${supportLetter}-${seqStr}`;
   }
 
   /**
-   * Check if file type is allowed
+   * Resolve mimeType from an allowed file extension, or undefined if disallowed
    */
-  function isAllowedFileType(fileName) {
-    const allowedExtensions = ['.pdf', '.xlsx', '.docx'];
+  function getMimeType(fileName) {
+    if (!fileName) return undefined;
+    const mimeByExtension = {
+      '.pdf': 'application/pdf',
+      '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    };
     const lowerName = fileName.toLowerCase();
-    return allowedExtensions.some((ext) => lowerName.endsWith(ext));
+    const ext = Object.keys(mimeByExtension).find((e) => lowerName.endsWith(e));
+    return ext ? mimeByExtension[ext] : undefined;
   }
 
   /**

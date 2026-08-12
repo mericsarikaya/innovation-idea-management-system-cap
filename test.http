@@ -16,7 +16,7 @@ Content-Type: application/json
   "feasibility": "High",
   "additionalInvestment": "50000",
   "company_ID": "c1111111-1111-1111-1111-111111111111",
-  "segment_ID": "s1111111-1111-1111-1111-111111111111"
+  "ideaSegment_ID": "s1111111-1111-1111-1111-111111111111"
 }
 
 ### 2. Get all Suggestions

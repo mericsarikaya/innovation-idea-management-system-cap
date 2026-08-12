@@ -1,0 +1,12 @@
+{
+  "build": {
+    "target": "gen",
+    "tasks": [
+      { "for": "node-cf" },
+      { "for": "hana" }
+    ]
+  },
+  "hana": {
+    "deploy-format": "hdbtable"
+  }
+}
